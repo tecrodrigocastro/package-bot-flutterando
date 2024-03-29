@@ -38,11 +38,31 @@ class CheckForUpdate extends Command
      */
     public function handle()
     {
-        foreach ($this->package_list as $package) {
-            $data = $this->http_cliente->getVersionPackage($package);
+        foreach ($this->package_list as $packages) {
+            $data = $this->http_cliente->getVersionPackage($packages);
 
-            $package =    Package::updateOrCreate(
-                ['name' => $package], // condições para encontrar o registro existente
+
+
+            $package = Package::firstOrNew(['name' => $data['name']]);
+
+            $package->latest_version = $data['latest']['version'];
+            $package->description = $data['latest']['pubspec']['description'];
+            $package->url = $data['latest']['archive_url'];
+
+            if ($package->isDirty()) {
+                $package->save();
+
+                // O pacote foi atualizado, não criado
+                // colocar logica para enviar mensagem no discord
+                $this->http_cliente->sendInfoDiscord($package);
+            }
+
+
+            /*   $package =    Package::updateOrCreate(
+                [
+                    'name' => $data['name'],
+                    'latest_version' => $data['latest']['version']
+                ], // condições para encontrar o registro existente
                 [ // valores para atualizar
                     'latest_version' => $data['latest']['version'],
                     'description' => $data['latest']['pubspec']['description'],
@@ -51,11 +71,12 @@ class CheckForUpdate extends Command
             );
             if (!$package->wasRecentlyCreated) {
                 // O pacote foi atualizado, não criado
-                // Coloque sua lógica para quando um pacote é atualizado aqui
-            }
+                // colocar logica para enviar mensagem no discord
+                $this->http_cliente->sendInfoDiscord($package);
+            } */
         }
 
-        logs()->info('teste', [1, 2, 3]);
-        $this->http_cliente->sendInfoDiscord();
+        //logs()->info('teste', [1, 2, 3]);
+        //$this->http_cliente->sendInfoDiscord($package);
     }
 }

@@ -10,19 +10,19 @@ use Illuminate\Support\Facades\Log;
 
 class CheckForUpdate extends Controller
 {
-    public $http_cliente;
+/*     public $http_cliente;
     public $package_list;
     public function __construct(HttpClientService $http_cliente)
     {
         $this->http_cliente = $http_cliente;
         $this->package_list = PackageName::all()->pluck('name')->toArray();
-    }
+    } */
     /**
      * Handle the incoming request.
      */
     public function __invoke()
     {
-        foreach ($this->package_list as $package) {
+        /*  foreach ($this->package_list as $package) {
             $data = $this->http_cliente->getVersionPackage($package);
 
             $teste =   Package::updateOrCreate(
@@ -33,9 +33,9 @@ class CheckForUpdate extends Controller
                     'url' => $data['latest']['archive_url'],
                 ]
             );
-        }
-        dump($teste);
+        } */
+        return response()->json(Package::all());
 
-       /*  return response()->json(Package::all()); */
+        /*  return response()->json(Package::all()); */
     }
 }
