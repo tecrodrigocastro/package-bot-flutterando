@@ -18,6 +18,8 @@ return [
 
     'name' => env('APP_NAME', 'Laravel'),
 
+    'pub_dev_url' => env('PUB_DEV_URL_API'),
+
     /*
     |--------------------------------------------------------------------------
     | Application Environment
