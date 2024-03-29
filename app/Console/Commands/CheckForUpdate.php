@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Console\Commands;
 
+use App\Http\Controllers\CheckForUpdate as ControllersCheckForUpdate;
 use App\Models\Package;
 use App\Models\PackageName;
 use App\Services\HttpClientService;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Console\Command;
 
-class CheckForUpdate extends Controller
+class CheckForUpdate extends Command
 {
     public $http_cliente;
     public $package_list;
@@ -16,16 +16,33 @@ class CheckForUpdate extends Controller
     {
         $this->http_cliente = $http_cliente;
         $this->package_list = PackageName::all()->pluck('name')->toArray();
+
+        parent::__construct();
+
     }
     /**
-     * Handle the incoming request.
+     * The name and signature of the console command.
+     *
+     * @var string
      */
-    public function __invoke()
+    protected $signature = 'check:update';
+
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
+    protected $description = 'Command description';
+
+    /**
+     * Execute the console command.
+     */
+    public function handle()
     {
         foreach ($this->package_list as $package) {
             $data = $this->http_cliente->getVersionPackage($package);
 
-            $teste =   Package::updateOrCreate(
+            Package::updateOrCreate(
                 ['name' => $package], // condições para encontrar o registro existente
                 [ // valores para atualizar
                     'latest_version' => $data['latest']['version'],
@@ -34,8 +51,5 @@ class CheckForUpdate extends Controller
                 ]
             );
         }
-        dump($teste);
-
-       /*  return response()->json(Package::all()); */
     }
 }
