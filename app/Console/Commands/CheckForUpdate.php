@@ -18,7 +18,6 @@ class CheckForUpdate extends Command
         $this->package_list = PackageName::all()->pluck('name')->toArray();
 
         parent::__construct();
-
     }
     /**
      * The name and signature of the console command.
@@ -42,7 +41,7 @@ class CheckForUpdate extends Command
         foreach ($this->package_list as $package) {
             $data = $this->http_cliente->getVersionPackage($package);
 
-            Package::updateOrCreate(
+            $package =    Package::updateOrCreate(
                 ['name' => $package], // condições para encontrar o registro existente
                 [ // valores para atualizar
                     'latest_version' => $data['latest']['version'],
@@ -50,6 +49,13 @@ class CheckForUpdate extends Command
                     'url' => $data['latest']['archive_url'],
                 ]
             );
+            if (!$package->wasRecentlyCreated) {
+                // O pacote foi atualizado, não criado
+                // Coloque sua lógica para quando um pacote é atualizado aqui
+            }
         }
+
+        logs()->info('teste', [1, 2, 3]);
+        $this->http_cliente->sendInfoDiscord();
     }
 }

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CheckForUpdate;
+use App\Http\Controllers\PackageController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
