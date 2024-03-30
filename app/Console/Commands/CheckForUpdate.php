@@ -54,24 +54,6 @@ class CheckForUpdate extends Command
                 // colocar logica para enviar mensagem no discord
                 $this->http_cliente->sendInfoDiscord($package);
             }
-
-
-            /*   $package =    Package::updateOrCreate(
-                [
-                    'name' => $data['name'],
-                    'latest_version' => $data['latest']['version']
-                ], // condições para encontrar o registro existente
-                [ // valores para atualizar
-                    'latest_version' => $data['latest']['version'],
-                    'description' => $data['latest']['pubspec']['description'],
-                    'url' => $data['latest']['archive_url'],
-                ]
-            );
-            if (!$package->wasRecentlyCreated) {
-                // O pacote foi atualizado, não criado
-                // colocar logica para enviar mensagem no discord
-                $this->http_cliente->sendInfoDiscord($package);
-            } */
         }
 
         //logs()->info('teste', [1, 2, 3]);
