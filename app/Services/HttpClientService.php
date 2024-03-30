@@ -35,21 +35,26 @@ class HttpClientService
             'embeds' => [
                 [
                     'author' => [
-                        'url' => 'https://pub.dev/packages/' . $package->name,
+                        'url' => $package->url,
                     ],
                     'title' => 'New version of ' . $package->name . ' is out! 🚀',
-                    'description' => 'The new version of ' . $package->name . ' is ' . $package->latest_version,
-                    'url' => 'https://pub.dev/packages/' . $package->name,
+                    'description' => "@everyone" . "\n" . "The new version of "  . $package->name . " is " . $package->latest_version,
+                    'url' =>  $package->url,
                     'color' => 15258703,
                     'fields' => [
                         [
                             'name' => 'Package',
-                            'value' => '[' . $package->name . '](https://pub.dev/packages/' . $package->name . ')',
+                            'value' => '[' . $package->name . '](' . $package->url . ')',
+                            'inline' => true,
+                        ],
+                        [
+                            'name' => 'Latest Version',
+                            'value' => $package->latest_version,
                             'inline' => true,
                         ],
                         [
                             'name' => 'Changelog',
-                            'value' => '[Changelog](https://pub.dev/packages/' . $package->name . '/changelog)',
+                            'value' => '[Changelog](' . $package->url . '/changelog)',
                             'inline' => true,
                         ],
                     ],

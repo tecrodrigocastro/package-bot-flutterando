@@ -41,13 +41,11 @@ class CheckForUpdate extends Command
         foreach ($this->package_list as $packages) {
             $data = $this->http_cliente->getVersionPackage($packages);
 
-
-
             $package = Package::firstOrNew(['name' => $data['name']]);
 
             $package->latest_version = $data['latest']['version'];
             $package->description = $data['latest']['pubspec']['description'];
-            $package->url = $data['latest']['archive_url'];
+            $package->url = 'https://pub.dev/packages/' . $data['name'];
 
             if ($package->isDirty()) {
                 $package->save();
