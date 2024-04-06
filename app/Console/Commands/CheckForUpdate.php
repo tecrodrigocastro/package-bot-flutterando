@@ -15,7 +15,6 @@ class CheckForUpdate extends Command
     public function __construct(HttpClientService $http_cliente)
     {
         $this->http_cliente = $http_cliente;
-        $this->package_list = PackageName::all()->pluck('name')->toArray();
 
         parent::__construct();
     }
@@ -38,6 +37,7 @@ class CheckForUpdate extends Command
      */
     public function handle()
     {
+        $this->package_list = PackageName::all()->pluck('name')->toArray();
         foreach ($this->package_list as $packages) {
             $data = $this->http_cliente->getVersionPackage($packages);
 
