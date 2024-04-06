@@ -50,9 +50,10 @@ jobs:
           sudo chmod -R 775 storage
           php artisan route:clear
           php artisan config:clear
+          php artisan config:cache
 
-      # - name: Run migrations
-      #   run: php artisan migrate
+      - name: Run migrations
+        run: php artisan migrate
 
       - name: Run post-install scripts
         run: composer run-script post-autoload-dump
