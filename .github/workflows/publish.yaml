@@ -43,8 +43,8 @@ jobs:
           echo "LOG_DISCORD_WEBHOOK_URL=${{ secrets.LOG_DISCORD_WEBHOOK_URL }}" >> .env
           php artisan key:generate
 
-      - name: Run migrations
-        run: php artisan migrate --force
+      # - name: Run migrations
+      #   run: php artisan migrate --force
 
       - name: Setup Project
         run: |
