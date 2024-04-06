@@ -40,6 +40,7 @@ jobs:
           sed -i 's/DB_DATABASE=.*/DB_DATABASE=${{ secrets.DB_DATABASE }}/' .env
           sed -i 's/DB_USERNAME=.*/DB_USERNAME=${{ secrets.DB_USERNAME }}/' .env
           sed -i 's/DB_PASSWORD=.*/DB_PASSWORD=${{ secrets.DB_PASSWORD }}/' .env
+          echo "LOG_DISCORD_WEBHOOK_URL=${{ secrets.LOG_DISCORD_WEBHOOK_URL }}" >> .env
           php artisan key:generate
 
       - name: Setup Project
@@ -50,8 +51,8 @@ jobs:
           php artisan route:clear
           php artisan config:clear
 
-      # - name: Run migrations
-      #   run: php artisan migrate
+      - name: Run migrations
+        run: php artisan migrate
 
       - name: Run post-install scripts
         run: composer run-script post-autoload-dump
