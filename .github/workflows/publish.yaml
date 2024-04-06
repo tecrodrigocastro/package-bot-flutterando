@@ -43,6 +43,9 @@ jobs:
           echo "LOG_DISCORD_WEBHOOK_URL=${{ secrets.LOG_DISCORD_WEBHOOK_URL }}" >> .env
           php artisan key:generate
 
+      - name: Run migrations
+        run: php artisan migrate --force
+
       - name: Setup Project
         run: |
           mkdir -p storage/logs
@@ -51,9 +54,6 @@ jobs:
           php artisan route:clear
           php artisan config:clear
           php artisan config:cache
-
-      - name: Run migrations
-        run: php artisan migrate
 
       - name: Run post-install scripts
         run: composer run-script post-autoload-dump
