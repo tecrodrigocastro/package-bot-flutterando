@@ -53,8 +53,8 @@ jobs:
           php artisan route:clear
           php artisan config:clear
 
-      - name: Run migrations
-        run: php artisan migrate
+      # - name: Run migrations
+      #   run: php artisan migrate
 
       - name: Run post-install scripts
         run: composer run-script post-autoload-dump
