@@ -21,18 +21,30 @@ class Package extends Component
 
     public function mount()
     {
+
         $this->package_list = PackageName::all();
-        // $this->http_cliente = new HttpClientService();
     }
 
     public function addPackage()
     {
-
-        $http_cliente = new HttpClientService();
-
         $this->validate();
-        PackageName::create(['name' => $this->name]);
 
+        $this->createPackageName();
+        $this->createPackageModel();
+
+        $this->package_list = PackageName::all();
+
+        session()->flash('message', 'Package adicionado com sucesso!');
+    }
+
+    private function createPackageName()
+    {
+        PackageName::create(['name' => $this->name]);
+    }
+
+    private function createPackageModel()
+    {
+        $http_cliente = new HttpClientService();
         $data = $http_cliente->getVersionPackage($this->name);
 
         ModelsPackage::create([
@@ -41,21 +53,27 @@ class Package extends Component
             'description' => $data['latest']['pubspec']['description'],
             'url' => 'https://pub.dev/packages/' . $this->name,
         ]);
-
-
-        $this->package_list = PackageName::all();
-
-
-        session()->flash('message', 'Package adicionado com sucesso!');
     }
 
     public function removePackage($id)
     {
-        $teste =  PackageName::find($id);
-        ModelsPackage::where('name', $teste->name)->delete();
-        $teste->delete();
+        $packageName = PackageName::find($id);
+        ModelsPackage::where('name', $packageName->name)->delete();
+        $packageName->delete();
+
         $this->package_list = PackageName::all();
-        session()->flash('message', 'Package deletado com sucesso!');
+    }
+
+    public function sendNotification()
+    {
+        $http_cliente = new HttpClientService();
+        $package = ModelsPackage::query()->get()->first();
+
+
+        $http_cliente->sendInfoDiscord($package);
+
+
+        session()->flash('message', 'Notificação enviada com sucesso!');
     }
 
     public function render()
